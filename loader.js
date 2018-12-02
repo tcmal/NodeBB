@@ -18,7 +18,13 @@ nconf.argv().env().file({
 });
 
 var	pidFilePath = path.join(__dirname, 'pidfile');
+
 var outputLogFilePath = path.join(__dirname, nconf.get('logFile') || 'logs/output.log');
+
+var logDir = path.dirname(outputLogFilePath);
+if (!fs.existsSync(logDir))
+	fs.mkdirSync(path.dirname(outputLogFilePath));
+
 var output = logrotate({ file: outputLogFilePath, size: '1m', keep: 3, compress: true });
 var silent = nconf.get('silent') === 'false' ? false : nconf.get('silent') !== false;
 var numProcs;
